@@ -1,17 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Building2, Mail, Phone, MapPin, Globe, FileText, Users, Calendar, CheckCircle, XCircle, Eye, Download, Share2, Edit3 } from "lucide-react";
 import { getCompanyById } from "../api/CompanyApi";
+import { getSecureItem, setSecureItem } from "../utils/secureStorage";
 
 const CompanyDetails = () => {
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [companies, setCompanies] = useState([]);
+  const [selectedCompanyId, setSelectedCompanyId] = useState(getSecureItem("CompanyId") || "");
 
+  // Get companies from user object in secure storage
+  useEffect(() => {
+    const user = getSecureItem("user");
+    if (user && user.Companies) {
+      setCompanies(user.Companies);
+      // If no selectedCompanyId, default to first company
+      if (!selectedCompanyId && user.Companies.length > 0) {
+        setSelectedCompanyId(user.Companies[0].CompanyID.toString());
+        setSecureItem("CompanyId", user.Companies[0].CompanyID.toString());
+      }
+    }
+  }, []);
+
+  // Fetch company details when selectedCompanyId changes
   useEffect(() => {
     const fetchCompany = async () => {
+      setLoading(true);
       try {
-        const data = await getCompanyById();
+        const data = await getCompanyById(selectedCompanyId);
         setCompany(data.data);
       } catch (err) {
         setError("Failed to fetch company details");
@@ -19,8 +37,16 @@ const CompanyDetails = () => {
         setLoading(false);
       }
     };
-    fetchCompany();
-  }, []);
+    if (selectedCompanyId) fetchCompany();
+  }, [selectedCompanyId]);
+
+  // Handle company switch
+  const handleCompanyChange = (e) => {
+    const companyId = e.target.value;
+    setSelectedCompanyId(companyId);
+    setSecureItem("CompanyId", companyId);
+    setError(null);
+  };
 
   if (loading) {
     return (
@@ -101,28 +127,25 @@ const CompanyDetails = () => {
                 <p className="text-slate-600">
                   Company ID: <span className="font-semibold text-amber-700">{company?.CompanyID}</span>
                 </p>
+                {/* Company Switcher Dropdown */}
+                {companies.length > 1 && (
+                  <div className="mt-4">
+                    <label htmlFor="company-switcher" className="block text-sm font-medium text-amber-700 mb-1">Switch Company:</label>
+                    <select
+                      id="company-switcher"
+                      value={selectedCompanyId}
+                      onChange={handleCompanyChange}
+                      className="px-3 py-2 rounded-xl border border-amber-300 focus:outline-none focus:ring focus:ring-amber-200"
+                    >
+                      {companies.map((c) => (
+                        <option key={c.CompanyID} value={c.CompanyID}>{c.BusinessName || `Company #${c.CompanyID}`}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
-            
-            {/* Action Buttons */}
-            {/* <div className="flex flex-wrap gap-3">
-              <button className="flex items-center gap-2 bg-white border border-amber-300 text-amber-700 px-4 py-2 rounded-xl font-medium hover:bg-amber-50 transition duration-200">
-                <Eye className="w-4 h-4" />
-                View Full
-              </button>
-              <button className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-medium transition duration-200 shadow-md hover:shadow-lg">
-                <Download className="w-4 h-4" />
-                Export
-              </button>
-              <button className="flex items-center gap-2 bg-white border border-amber-300 text-amber-700 px-4 py-2 rounded-xl font-medium hover:bg-amber-50 transition duration-200">
-                <Share2 className="w-4 h-4" />
-                Share
-              </button>
-              <button className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-medium transition duration-200 shadow-md hover:shadow-lg">
-                <Edit3 className="w-4 h-4" />
-                Edit
-              </button>
-            </div> */}
+            {/* ...existing code... */}
           </div>
         </div>
 

@@ -38,7 +38,7 @@ export const upsertCompany = async (companyData) => {
  */
 export const getCompanyById = async (id) => {
   try {
-    const companyId = id || getSecureItem("CompanyId");
+    const companyId = id || getSecureItem("CompanyId"); 
     console.log("Using CompanyId for getCompanyById:", companyId);
 
     if (!companyId) throw new Error("CompanyId not found");

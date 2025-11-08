@@ -44,6 +44,8 @@ import ProductList from "./pages/ProductView/ProductList";
 import { getSecureItem, setSecureItem } from "./utils/secureStorage";
 import Plansandpricing from "./pages/Plansandpricing";
 import ServiceDetails from "./pages/ServiceDetails";
+import MyPackages from "./pages/MyPackages";
+import MyIndividualservices from "./pages/MyIndividualservices";
 
 function App() {
   const location = useLocation();
@@ -127,12 +129,12 @@ useEffect(() => {
               {/* BizpoleOne Nested Dashboard */}
               <Route path="bizpoleone" element={<BizpoleOneDashboardLayout />}>
                 <Route index element={<BizpoleOne />} /> {/* default inside bizpoleone */}
-                <Route path="package" element={<BizpoleOneOverview />} />
+                <Route path="package" element={<MyPackages />} />
                 <Route path="services" element={<BizpoleOneServices />} />
                 <Route path="orders" element={<BizpoleOneServices />} />
                 <Route path="tasks" element={<BizpoleOneTasks />} />
                 <Route path="pricing" element={<Plansandpricing />} />
-                <Route path="individual" element={<BizpoleOneServices />} />
+                <Route path="individual" element={<MyIndividualservices />} />
               </Route>
             </Route>
           </Route>

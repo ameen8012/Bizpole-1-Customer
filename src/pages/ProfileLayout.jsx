@@ -138,9 +138,7 @@ const ProfileLayout = () => {
                         : ""
                     }`}
                     onClick={() => {
-                      // set UI label
                       setSelectedCompany(company.BusinessName || company.CompanyName || "");
-                      // store selectedCompany reliably as JSON string
                       setSecureItem(
                         "selectedCompany",
                         JSON.stringify({
@@ -148,7 +146,10 @@ const ProfileLayout = () => {
                           CompanyName: company.BusinessName || company.CompanyName || "",
                         })
                       );
+                      setSecureItem("CompanyId", company.CompanyID.toString());
                       setShowCompanyDropdown(false);
+                      // Force reload to ensure all order pages use new company
+                      window.location.reload();
                     }}
                   >
                     {company.BusinessName || company.CompanyName}
@@ -256,18 +257,18 @@ const ProfileLayout = () => {
 
           </button>
 
-          <button className="flex w-full items-center justify-between rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-200">
+          {/* <button className="flex w-full items-center justify-between rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-200">
             <span className="flex items-center gap-2">
               <Send size={16} /> Send Feedback
             </span>
             <span>→</span>
-          </button>
-          <button className="flex w-full items-center justify-between rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-200">
+          </button> */}
+          {/* <button className="flex w-full items-center justify-between rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-200">
             <span className="flex items-center gap-2">
               <HelpCircle size={16} /> Knowledge Base
             </span>
             <span>→</span>
-          </button>
+          </button> */}
 
           {/* Logout */}
           <button onClick={handleLogout} className="flex items-center gap-3 w-full py-2 px-3 rounded-lg text-red-500 hover:bg-gray-700 hover:text-red-400 transition">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getPackagesByServiceType } from "../api/ServiceType";
+import { getPackagesByServiceType, getAllServiceTypes } from "../api/ServiceType";
 import { upsertQuote } from "../api/Quote";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Calendar, Sparkles, ArrowRight } from "lucide-react";
@@ -17,6 +17,8 @@ const PlansAndPricing = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [businessTypes, setBusinessTypes] = useState([]);
+  const [selectedTypeId, setSelectedTypeId] = useState(null);
 
   // Handle package quote creation
   const handlePackageQuote = async (plan) => {
@@ -99,6 +101,19 @@ const PlansAndPricing = () => {
     }
   };
 
+  // Fetch business types (service types) if not present
+  useEffect(() => {
+    const fetchBusinessTypes = async () => {
+      try {
+        const types = await getAllServiceTypes();
+        setBusinessTypes(Array.isArray(types) ? types : []);
+      } catch (err) {
+        // ignore error, fallback to error in main fetch
+      }
+    };
+    fetchBusinessTypes();
+  }, []);
+
   // Fetch packages and services
   useEffect(() => {
     const fetchData = async () => {
@@ -106,8 +121,9 @@ const PlansAndPricing = () => {
       setError(null);
       try {
         let typeId = null;
-
-        if (location?.state?.type) {
+        if (selectedTypeId) {
+          typeId = selectedTypeId;
+        } else if (location?.state?.type) {
           typeId = location.state.type;
         } else {
           const loc = getSecureItem("location");
@@ -117,7 +133,6 @@ const PlansAndPricing = () => {
         }
 
         if (!typeId) {
-          setError("No service type found. Please select a service first.");
           setPackages([]);
           setServices([]);
           setLoading(false);
@@ -127,7 +142,6 @@ const PlansAndPricing = () => {
         const data = await getPackagesByServiceType(typeId);
         if (data && Array.isArray(data)) {
           setPackages(data);
-
           // Extract unique services
           const allServices = data.reduce((acc, pkg) => {
             if (pkg.services && Array.isArray(pkg.services)) {
@@ -151,9 +165,8 @@ const PlansAndPricing = () => {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [location]);
+  }, [location, selectedTypeId]);
 
   const calculateTotal = () => {
     return selectedServices.reduce(
@@ -192,6 +205,23 @@ const PlansAndPricing = () => {
             solution with individual services
           </motion.p>
         </div>
+
+        {/* Business Type Selector if not selected */}
+        {!selectedTypeId && businessTypes.length > 0 && (
+          <div className="mb-10 max-w-xl mx-auto">
+            <label className="block mb-2 text-lg font-semibold text-gray-700">Select Business Type</label>
+            <select
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring focus:ring-yellow-200"
+              value={selectedTypeId || ""}
+              onChange={e => setSelectedTypeId(e.target.value)}
+            >
+              <option value="">-- Choose Business Type --</option>
+              {businessTypes.map(type => (
+                <option key={type.Id} value={type.Id}>{type.Service_Name}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Tab Switcher */}
         <div className="flex justify-center mb-12">
@@ -234,7 +264,7 @@ const PlansAndPricing = () => {
         )}
 
         {/* Packages Content */}
-        {!loading && !error && (
+        {!loading && !error && selectedTypeId && (
           <AnimatePresence mode="wait">
             {activeTab === "packages" && (
               <motion.div
