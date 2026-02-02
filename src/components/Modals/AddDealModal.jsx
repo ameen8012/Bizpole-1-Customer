@@ -134,7 +134,8 @@ const AddDealModal = ({ isOpen, onClose, onSuccess }) => {
                     preferredLanguage: formData.companyPreferredLanguage
                 },
                 franchiseeId: user.FranchiseeID || 1,
-                employeeId: user.EmployeeID || 9
+                employeeId: user.EmployeeID || 9,
+                isAssociate: true
             };
 
 
