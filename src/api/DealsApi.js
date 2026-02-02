@@ -38,7 +38,29 @@ export const listDeals = async (filters) => {
     }
 };
 
+export const listAssociateCustomers = async (payload) => {
+    try {
+        const response = await axiosInstance.post("/customer/associate-list", payload);
+        return response.data;
+    } catch (error) {
+        console.error("Error listing associate customers:", error);
+        throw error;
+    }
+};
+
+export const listAssociateCompanies = async (payload) => {
+    try {
+        const response = await axiosInstance.post("/company/associate-list", payload);
+        return response.data;
+    } catch (error) {
+        console.error("Error listing associate companies:", error);
+        throw error;
+    }
+};
+
 export default {
     convertToDeal,
     listDeals,
+    listAssociateCustomers,
+    listAssociateCompanies,
 };
