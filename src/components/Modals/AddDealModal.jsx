@@ -121,7 +121,8 @@ const AddDealModal = ({ isOpen, onClose, onSuccess }) => {
                     district: formData.district,
                     preferredLanguage: formData.preferredLanguage,
                     followupNote: formData.followupNote,
-                    closureDate: formData.closureDate
+                    closureDate: formData.closureDate,
+                    isAssociate: true
                 },
                 company: {
                     name: formData.companyName,
@@ -131,7 +132,8 @@ const AddDealModal = ({ isOpen, onClose, onSuccess }) => {
                     country: formData.companyCountry,
                     state: formData.companyState,
                     district: formData.companyDistrict,
-                    preferredLanguage: formData.companyPreferredLanguage
+                    preferredLanguage: formData.companyPreferredLanguage,
+                    isAssociate: true
                 },
                 franchiseeId: user.FranchiseeID || 1,
                 employeeId: user.EmployeeID || 9,
