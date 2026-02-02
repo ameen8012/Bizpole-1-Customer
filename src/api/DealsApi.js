@@ -23,6 +23,22 @@ export const convertToDeal = async (payload) => {
     }
 };
 
+/**
+ * List deals with filters and pagination
+ * @param {Object} filters - { franchiseId, employeeId, status, page, limit, search, isAssociate, ... }
+ * @returns {Promise<Object>} - { success, total, data }
+ */
+export const listDeals = async (filters) => {
+    try {
+        const response = await axiosInstance.post("/getdeals", filters);
+        return response.data;
+    } catch (error) {
+        console.error("Error listing deals:", error);
+        throw error;
+    }
+};
+
 export default {
     convertToDeal,
+    listDeals,
 };
