@@ -25,7 +25,7 @@ export const createCustomer = (payload) =>
 export const getCustomers = () => axiosInstance.get("/customer");
 
 export const getCustomerById = (id) =>
-  axiosInstance.get(`/customer/${id}`);
+  axiosInstance.post("/customer/get", { CustomerID: id });
 
 export const deleteCustomer = (id) =>
   axiosInstance.delete(`/customer/${id}`);

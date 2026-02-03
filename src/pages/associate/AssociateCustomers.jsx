@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { MoreVertical, Search, Filter, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import * as DealsApi from '../../api/DealsApi';
 import { getSecureItem } from '../../utils/secureStorage';
 
 const AssociateCustomers = () => {
+    const navigate = useNavigate();
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -88,10 +90,18 @@ const AssociateCustomers = () => {
                                 customers.map((customer, index) => (
                                     <tr key={customer.CustomerID} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-4 text-sm text-gray-600">{(page - 1) * pageSize + index + 1}</td>
-                                        <td className="px-6 py-4 text-sm font-medium text-[#4b49ac] cursor-pointer hover:underline">
+                                        <td
+                                            className="px-6 py-4 text-sm font-medium text-[#4b49ac] cursor-pointer hover:underline"
+                                            onClick={() => navigate(`/associate/customers/${customer.CustomerID}`)}
+                                        >
                                             {customer.CustomerCode || '-'}
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-900 font-medium">{customer.CustomerName}</td>
+                                        <td
+                                            className="px-6 py-4 text-sm text-gray-900 font-medium cursor-pointer hover:text-[#4b49ac]"
+                                            onClick={() => navigate(`/associate/customers/${customer.CustomerID}`)}
+                                        >
+                                            {customer.CustomerName}
+                                        </td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{customer.Origin || '-'}</td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{customer.CustomerCategory || '-'}</td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{customer.CreatedByName || '-'}</td>
