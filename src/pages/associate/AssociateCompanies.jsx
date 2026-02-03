@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MoreVertical, Search, Filter, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import * as DealsApi from '../../api/DealsApi';
 import { getSecureItem } from '../../utils/secureStorage';
 import { format } from 'date-fns';
 
 const AssociateCompanies = () => {
+    const navigate = useNavigate();
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -94,10 +96,18 @@ const AssociateCompanies = () => {
                                 companies.map((company, index) => (
                                     <tr key={company.CompanyID} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-4 text-sm text-gray-600">{(page - 1) * pageSize + index + 1}</td>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                        <td
+                                            className="px-6 py-4 text-sm font-medium text-gray-900 cursor-pointer hover:text-[#4b49ac]"
+                                            onClick={() => navigate(`/associate/companies/${company.CompanyID}`)}
+                                        >
                                             {company.CompanyCode || 'N/A'}
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-900 font-medium">{company.BusinessName}</td>
+                                        <td
+                                            className="px-6 py-4 text-sm text-gray-900 font-medium cursor-pointer hover:text-[#4b49ac]"
+                                            onClick={() => navigate(`/associate/companies/${company.CompanyID}`)}
+                                        >
+                                            {company.BusinessName}
+                                        </td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{company.CreatedByName || 'Unknown'}</td>
                                         <td className="px-6 py-4 text-sm text-gray-600 font-medium text-[#4b49ac] hover:underline cursor-pointer">
                                             {company.PrimaryCustomerID ? `F${company.FranchiseID}/C${String(company.PrimaryCustomerID).padStart(7, "0")}` : 'null'}
