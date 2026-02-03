@@ -57,6 +57,7 @@ import AssociateOrders from "./pages/associate/AssociateOrders";
 import AssociateServices from "./pages/associate/AssociateServices";
 import AssociateCustomers from "./pages/associate/AssociateCustomers";
 import AssociateCompanies from "./pages/associate/AssociateCompanies";
+import DealDetailView from "./pages/associate/DealDetailView";
 
 function App() {
   const location = useLocation();
@@ -157,6 +158,7 @@ function App() {
               <Route path="profile" element={<AssociateProfile />} />
               {/* <Route path="leads" element={<AssociateLeads />} /> */}
               <Route path="deals" element={<AssociateDeals />} />
+              <Route path="deals/:id" element={<DealDetailView />} />
               <Route path="quotes" element={<AssociateQuotes />} />
               <Route path="orders" element={<AssociateOrders />} />
               <Route path="services" element={<AssociateServices />} />

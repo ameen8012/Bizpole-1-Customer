@@ -58,9 +58,25 @@ export const listAssociateCompanies = async (payload) => {
     }
 };
 
+/**
+ * Get single deal details by ID
+ * @param {string|number} id - Deal ID
+ * @returns {Promise<Object>} - { success, data }
+ */
+export const getDealById = async (id) => {
+    try {
+        const response = await axiosInstance.post("/getdeal", { id });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching deal details:", error);
+        throw error;
+    }
+};
+
 export default {
     convertToDeal,
     listDeals,
     listAssociateCustomers,
     listAssociateCompanies,
+    getDealById,
 };

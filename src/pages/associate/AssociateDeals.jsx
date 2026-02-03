@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AddDealModal from '../../components/Modals/AddDealModal';
 import { Plus, Edit2, Trash2, Search, Filter, Loader2, MoreVertical, ExternalLink } from 'lucide-react';
 import DealsApi from '../../api/DealsApi';
@@ -6,6 +7,7 @@ import { getSecureItem } from '../../utils/secureStorage';
 import { format } from 'date-fns';
 
 const AssociateDeals = () => {
+    const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [deals, setDeals] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -153,7 +155,10 @@ const AssociateDeals = () => {
                                         <td className="px-6 py-4 text-sm text-slate-600 font-medium">{index + 1}</td>
                                         <td className="px-6 py-4 text-sm text-slate-400 font-mono tracking-tight">{deal.DealCode || "--"}</td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2 group cursor-pointer">
+                                            <div
+                                                className="flex items-center gap-2 group cursor-pointer"
+                                                onClick={() => navigate(`/associate/deals/${deal.id}`)}
+                                            >
                                                 <span className="text-sm font-bold text-slate-900 group-hover:text-[#4b49ac] transition-colors">
                                                     {deal.name}
                                                 </span>
