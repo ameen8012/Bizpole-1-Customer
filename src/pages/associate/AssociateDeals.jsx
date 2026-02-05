@@ -63,7 +63,7 @@ const AssociateDeals = () => {
                 PackageName: null,
                 name: deal.name,
                 isAssociate: 1,
-                AssociateID: AssociateID,
+                AssociateID: parseInt(AssociateID),
                 services: deal.DealServices?.map(service => {
                     console.log('service from deal:', service);
                     return {
